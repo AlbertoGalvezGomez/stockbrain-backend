@@ -56,7 +56,6 @@ public class ControladorProducto {
             @RequestParam(value = "imagen", required = false) MultipartFile imagen,
             @RequestParam("tiendaId") Long tiendaId) {
 
-        // Validar tienda
         EntidadTienda tienda = tiendaDAO.findById(tiendaId)
                 .orElseThrow(() -> new RuntimeException("Tienda no encontrada: " + tiendaId));
 
@@ -67,7 +66,6 @@ public class ControladorProducto {
         producto.setDescripcion(descripcion);
         producto.setTienda(tienda);
 
-        // Subir imagen
         if (imagen != null && !imagen.isEmpty()) {
             String ruta = guardarImagen(imagen);
             producto.setImagenRuta(ruta);
@@ -84,9 +82,9 @@ public class ControladorProducto {
             @RequestParam("precio") double precio,
             @RequestParam("stock") int stock,
             @RequestParam(value = "descripcion", required = false) String descripcion,
-            @RequestParam(value = "imagen", required = false) MultipartFile imagen,
-            @RequestParam(value = "tiendaId", required = false) Long tiendaId) {
+            @RequestParam(value = "imagen", required = false) MultipartFile imagen
 
+    ) {
         return servicioProducto.buscarProductoPorId(id)
                 .map(producto -> {
                     producto.setNombre(nombre);
@@ -94,14 +92,6 @@ public class ControladorProducto {
                     producto.setStock(stock);
                     producto.setDescripcion(descripcion);
 
-                    // Cambiar tienda solo si se envía y existe
-                    if (tiendaId != null) {
-                        EntidadTienda nuevaTienda = tiendaDAO.findById(tiendaId)
-                                .orElseThrow(() -> new RuntimeException("Tienda no encontrada: " + tiendaId));
-                        producto.setTienda(nuevaTienda);
-                    }
-
-                    // Reemplazar imagen
                     if (imagen != null && !imagen.isEmpty()) {
                         borrarImagenAnterior(producto.getImagenRuta());
                         String nuevaRuta = guardarImagen(imagen);
@@ -124,7 +114,6 @@ public class ControladorProducto {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // === MÉTODOS AUXILIARES ===
     private String guardarImagen(MultipartFile imagen) {
         try {
             validarImagen(imagen);
@@ -132,7 +121,12 @@ public class ControladorProducto {
             Path path = Paths.get(uploadDir, fileName);
             Files.createDirectories(path.getParent());
             Files.write(path, imagen.getBytes());
-            return "/uploads/productos/" + fileName;
+
+            // Opción 1 → Para emulador Android (recomendada mientras desarrollas)
+            return "http://10.0.2.2:8080/uploads/productos/" + fileName;
+
+            // Opción 2 → Para dispositivo físico en la misma red WiFi
+            // return "http://192.168.1.133:8080/uploads/productos/" + fileName;
         } catch (IOException e) {
             throw new RuntimeException("Error al guardar imagen", e);
         }

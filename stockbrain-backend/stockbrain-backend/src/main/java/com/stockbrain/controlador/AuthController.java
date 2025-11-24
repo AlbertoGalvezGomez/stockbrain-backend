@@ -17,17 +17,20 @@ public class AuthController {
     private ServicioUsuario servicioUsuario;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+
         System.out.println("Recibido: email=" + loginRequest.getEmail() + ", password=" + loginRequest.getPassword());
+
         EntidadUsuario usuario = servicioUsuario.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+
         if (usuario != null) {
-            LoginResponse response = new LoginResponse();
-            response.setId(usuario.getId());
-            response.setEmail(usuario.getEmail());
-            response.setRol(usuario.getRol() != null ? usuario.getRol().name() : "USER");
-            response.setMessage("Login exitoso");
+            usuario.setPassword(null);
+
+            LoginResponse response = new LoginResponse(usuario, "Login exitoso");
             return ResponseEntity.ok(response);
         }
-        return ResponseEntity.status(401).body(new LoginResponse(null, null, null, "Credenciales inválidas"));
+
+        LoginResponse error = new LoginResponse(null, null, null, null, null, "Credenciales inválidas");
+        return ResponseEntity.status(401).body(error);
     }
 }
