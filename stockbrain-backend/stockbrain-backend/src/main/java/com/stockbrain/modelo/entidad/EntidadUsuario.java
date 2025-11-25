@@ -39,6 +39,14 @@ public class EntidadUsuario {
     @JsonBackReference
     private EntidadTienda tienda;
 
+    @OneToMany(
+            mappedBy = "administrador",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<EntidadTienda> tiendasAdministradas = new ArrayList<>();
+
     public Long getTiendaId() {
         return tienda != null ? tienda.getId() : null;
     }

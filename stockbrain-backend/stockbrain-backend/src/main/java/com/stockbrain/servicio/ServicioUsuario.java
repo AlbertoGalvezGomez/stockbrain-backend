@@ -6,6 +6,7 @@ import com.stockbrain.modelo.entidad.EntidadUsuario;
 import com.stockbrain.seguridad.SecurityConfig;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -57,6 +58,13 @@ public class ServicioUsuario {
         return resultado;
     }
 
+    /*public void eliminarUsuarioPorId(Long id) {
+        usuarioDAO.deleteById(id);
+    }
+
+     */
+
+    @Transactional
     public void eliminarUsuarioPorId(Long id) {
         usuarioDAO.deleteById(id);
     }

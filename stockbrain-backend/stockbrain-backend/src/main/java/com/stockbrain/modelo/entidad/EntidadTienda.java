@@ -27,9 +27,8 @@ public class EntidadTienda {
     @NotBlank(message = "La ubicación es obligatoria")
     private String ubicacion;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id")
-    @NotNull(message = "El administrador es obligatorio")
     private EntidadUsuario administrador;
 
     @OneToMany(mappedBy = "tienda", cascade = CascadeType.ALL)
