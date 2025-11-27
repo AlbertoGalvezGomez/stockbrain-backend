@@ -3,10 +3,7 @@ package com.stockbrain.modelo.entidad;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @NoArgsConstructor
@@ -34,19 +31,16 @@ public class EntidadUsuario {
     @Enumerated(EnumType.STRING)
     private Rol rol;
 
-    @ManyToOne
-    @JoinColumn(name = "tienda_id", nullable = true)
-    @JsonBackReference
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(
+            name = "tienda_id",
+            nullable = true,
+            unique = true
+    )
+    @JsonIgnore
     private EntidadTienda tienda;
 
-    @OneToMany(
-            mappedBy = "administrador",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-    )
-    private List<EntidadTienda> tiendasAdministradas = new ArrayList<>();
-
+    @Transient
     public Long getTiendaId() {
         return tienda != null ? tienda.getId() : null;
     }
@@ -55,8 +49,9 @@ public class EntidadUsuario {
         if (tiendaId == null) {
             this.tienda = null;
         } else {
-            this.tienda = new EntidadTienda();
-            this.tienda.setId(tiendaId);
+            EntidadTienda ref = new EntidadTienda();
+            ref.setId(tiendaId);
+            this.tienda = ref;
         }
     }
 }

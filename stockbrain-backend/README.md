@@ -1,2 +1,0 @@
-# stockbrain-backend
-

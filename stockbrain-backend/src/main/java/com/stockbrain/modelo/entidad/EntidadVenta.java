@@ -1,5 +1,6 @@
 package com.stockbrain.modelo.entidad;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
@@ -8,21 +9,16 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "ventas")
+@Data @NoArgsConstructor @AllArgsConstructor
 public class EntidadVenta {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate fecha;
-
-    @PositiveOrZero
-    private int cantidad;
+    private LocalDate fecha = LocalDate.now();
+    @PositiveOrZero private int cantidad;
 
     @ManyToOne
     @JoinColumn(name = "producto_id", nullable = false)
@@ -30,5 +26,6 @@ public class EntidadVenta {
 
     @ManyToOne
     @JoinColumn(name = "tienda_id", nullable = false)
+    @JsonIgnore
     private EntidadTienda tienda;
 }
