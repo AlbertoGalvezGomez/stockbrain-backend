@@ -6,6 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "alertas")
@@ -15,15 +19,27 @@ public class EntidadAlerta {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank private String tipo;
+    @NotBlank
+    @Column(nullable = false)
+    private String tipo;
+
+    @Column(nullable = false, length = 500)
     private String mensaje;
 
-    @ManyToOne
-    @JoinColumn(name = "producto_id", nullable = true)
+    @Column(nullable = false)
+    private LocalDateTime fecha = LocalDateTime.now();
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "producto_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private EntidadProducto producto;
 
     @ManyToOne
     @JoinColumn(name = "tienda_id", nullable = false)
     @JsonIgnore
     private EntidadTienda tienda;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id") // opcional: quién hizo la acción
+    private EntidadUsuario usuario;
 }

@@ -6,6 +6,8 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
@@ -21,8 +23,9 @@ public class EntidadVenta {
 
     @PositiveOrZero private int cantidad;
 
-    @ManyToOne
+    @ManyToOne(optional = true)
     @JoinColumn(name = "producto_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private EntidadProducto producto;
 
     @ManyToOne

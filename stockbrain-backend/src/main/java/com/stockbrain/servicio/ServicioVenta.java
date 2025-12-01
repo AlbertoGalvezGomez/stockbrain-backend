@@ -21,6 +21,9 @@ public class ServicioVenta {
     @Autowired
     private IProductoDAO productoDAO;
 
+    @Autowired
+    private ServicioAlerta servicioAlerta;
+
     public List<EntidadVenta> listarVentas() {
         return ventaDAO.findAll();
     }
@@ -29,7 +32,7 @@ public class ServicioVenta {
         return ventaDAO.findById(id);
     }
 
-    @Transactional  // ¡Importantísimo! Para que funcione todo en una transacción
+    @Transactional
     public EntidadVenta guardarVenta(EntidadVenta venta) {
         Long productoId = venta.getProducto().getId();
         EntidadProducto producto = productoDAO.findById(productoId)
@@ -40,16 +43,29 @@ public class ServicioVenta {
                     ", solicitado: " + venta.getCantidad());
         }
 
+        // Restar stock
         producto.setStock(producto.getStock() - venta.getCantidad());
         productoDAO.save(producto);
 
+        // Asignar tienda y fecha
         venta.setTienda(producto.getTienda());
-
         if (venta.getFecha() == null) {
             venta.setFecha(LocalDate.now());
         }
 
-        return ventaDAO.save(venta);
+        // GUARDAR LA VENTA
+        EntidadVenta ventaGuardada = ventaDAO.save(venta);
+
+        // CREAR EL MENSAJE EN ALERTAS (DESPUÉS del save)
+        servicioAlerta.crear(
+                "VENTA_REALIZADA",
+                "Venta realizada: " + venta.getCantidad() + " unidades de " + producto.getNombre(),
+                producto,
+                producto.getTienda()
+        );
+
+        // RETORNAR LA VENTA GUARDADA
+        return ventaGuardada;
     }
 
     public void eliminarVentaPorId(Long id) {
