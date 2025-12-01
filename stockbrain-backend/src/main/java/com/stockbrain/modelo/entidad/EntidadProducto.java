@@ -26,7 +26,7 @@ public class EntidadProducto {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tienda_id", nullable = false)
-    @JsonIgnore  // evita bucle infinito
+    @JsonIgnore
     private EntidadTienda tienda;
 
     @JsonProperty("imagenUrl")

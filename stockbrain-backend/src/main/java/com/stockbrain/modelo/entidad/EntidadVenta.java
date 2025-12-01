@@ -18,6 +18,7 @@ public class EntidadVenta {
     private Long id;
 
     private LocalDate fecha = LocalDate.now();
+
     @PositiveOrZero private int cantidad;
 
     @ManyToOne
