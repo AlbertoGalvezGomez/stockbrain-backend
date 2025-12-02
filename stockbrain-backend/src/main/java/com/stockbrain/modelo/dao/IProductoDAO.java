@@ -9,7 +9,5 @@ import java.util.List;
 
 public interface IProductoDAO extends JpaRepository<EntidadProducto, Long> {
 
-    // JpaRepository ya incluye los métodos CRUD básicos, por lo que no es necesario extender CrudRepository
-
     List<EntidadProducto> findByTiendaId(Long tiendaId);
 }

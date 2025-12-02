@@ -18,12 +18,10 @@ public class ServicioProducto {
     @Autowired
     private ServicioAlerta servicioAlerta;
 
-    // Listar todos los productos
     public List<EntidadProducto> listarTodosLosProductos() {
         return productoDAO.findAll();
     }
 
-    // Buscar producto por ID
     public Optional<EntidadProducto> buscarProductoPorId(Long id) {
         return productoDAO.findById(id);
     }
@@ -49,15 +47,13 @@ public class ServicioProducto {
         EntidadProducto producto = productoDAO.findById(id)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        // GUARDAMOS LA ALERTA ANTES de borrar el producto y SIN asociar el objeto
         servicioAlerta.crear(
                 "PRODUCTO_ELIMINADO",
                 "Producto eliminado: " + producto.getNombre(),
-                null,  // ← producto = null (no rompemos FK)
+                null,
                 producto.getTienda()
         );
 
-        // Ahora sí, borramos todo con tranquilidad
         productoDAO.deleteById(id);  // borra ventas + alertas antiguas + producto
     }
 

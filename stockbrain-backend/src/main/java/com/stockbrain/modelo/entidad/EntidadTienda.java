@@ -30,13 +30,9 @@ public class EntidadTienda {
     // RELACIÓN CORRECTA: lado inverso del @OneToOne que tienes en Usuario
     // La FK está en la tabla usuarios (columna tienda_id) → por eso usamos "mappedBy"
     @OneToOne(mappedBy = "tienda", fetch = FetchType.LAZY)
-    @JsonIgnore  // evita ciclos infinitos
+    @JsonIgnore
     private EntidadUsuario administrador;
 
-    // ELIMINAMOS ESTO POR COMPLETO (ya no existen empleados que "pertenecen" a tienda)
-    // @OneToMany(mappedBy = "tienda") private List<EntidadUsuario> empleados;
-
-    // Productos de la tienda
     @OneToMany(
             mappedBy = "tienda",
             cascade = CascadeType.ALL,
@@ -45,7 +41,6 @@ public class EntidadTienda {
     )
     private List<EntidadProducto> productos = new ArrayList<>();
 
-    // Ventas de la tienda (añadimos porque es útil y lógico)
     @OneToMany(
             mappedBy = "tienda",
             cascade = CascadeType.ALL,
@@ -54,7 +49,6 @@ public class EntidadTienda {
     )
     private List<EntidadVenta> ventas = new ArrayList<>();
 
-    // Alertas de la tienda
     @OneToMany(
             mappedBy = "tienda",
             cascade = CascadeType.ALL,

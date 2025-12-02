@@ -4,9 +4,8 @@ public class TiendaRequest {
 
     private String nombre;
     private String ubicacion;
-    private Long administradorId;  // ← nombre claro y directo
+    private Long administradorId;
 
-    // Constructor vacío (Jackson lo necesita)
     public TiendaRequest() {}
 
     public TiendaRequest(String nombre, String ubicacion, Long administradorId) {

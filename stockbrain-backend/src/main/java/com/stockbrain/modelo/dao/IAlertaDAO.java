@@ -9,8 +9,5 @@ import java.util.List;
 
 public interface IAlertaDAO extends JpaRepository<EntidadAlerta, Long> {
 
-
-        List<EntidadAlerta> findByTiendaIdOrderByFechaDesc(Long tiendaId);
-
-
+    List<EntidadAlerta> findByTiendaIdOrderByFechaDesc(Long tiendaId);
 }

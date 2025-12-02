@@ -58,12 +58,6 @@ public class ServicioUsuario {
         return resultado;
     }
 
-    /*public void eliminarUsuarioPorId(Long id) {
-        usuarioDAO.deleteById(id);
-    }
-
-     */
-
     @Transactional
     public void eliminarUsuarioPorId(Long id) {
         usuarioDAO.deleteById(id);

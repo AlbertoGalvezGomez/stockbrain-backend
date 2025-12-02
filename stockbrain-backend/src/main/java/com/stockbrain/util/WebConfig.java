@@ -11,7 +11,5 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/productos/**")
                 .addResourceLocations("file:C:/Users/Alberto/Desktop/stockbrain-backend/stockbrain-backend/uploads/productos/");
-        // Nota: en Windows se usan barras normales "/" o dobles "\\"
-        // pero Spring acepta también "/" → funciona igual
     }
 }

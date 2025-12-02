@@ -24,13 +24,11 @@ public class ControladorTienda {
     @Autowired
     private IUsuarioDAO usuarioDAO;
 
-    // GET: Listar todas las tiendas
     @GetMapping
     public List<EntidadTienda> listarTiendas() {
         return tiendaDAO.findAll();
     }
 
-    // GET: Obtener una tienda por ID
     @GetMapping("/{id}")
     public ResponseEntity<EntidadTienda> obtenerTienda(@PathVariable Long id) {
         return tiendaDAO.findById(id)
@@ -62,16 +60,10 @@ public class ControladorTienda {
         nuevaTienda.setUbicacion(request.getUbicacion().trim());
         nuevaTienda.setAdministrador(admin);
 
-        // CLAVE: asignar la tienda al usuario (lado propietario de la relación)
         admin.setTienda(nuevaTienda);
 
-        // Guardar (en @Transactional se guarda todo)
         EntidadTienda guardada = tiendaDAO.save(nuevaTienda);
 
         return ResponseEntity.ok(guardada);
     }
-
-    // (Opcional) Si quieres permitir borrar tiendas más adelante
-    // @DeleteMapping("/{id}")
-    // public ResponseEntity<Void> eliminarTienda(@PathVariable Long id) { ... }
 }
