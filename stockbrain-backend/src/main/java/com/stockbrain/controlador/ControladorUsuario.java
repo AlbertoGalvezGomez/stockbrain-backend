@@ -45,6 +45,10 @@ public class ControladorUsuario {
             usuario.setPassword(hashed);
         }
 
+        if(usuarioDAO.findByEmail(usuario.getEmail()).isPresent()){
+            throw new IllegalArgumentException("El email ya está en uso");
+        }
+
         return ResponseEntity.ok(usuarioDAO.save(usuario));
     }
 

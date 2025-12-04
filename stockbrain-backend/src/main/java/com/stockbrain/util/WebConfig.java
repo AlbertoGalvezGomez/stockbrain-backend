@@ -1,5 +1,6 @@
 package com.stockbrain.util;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -7,9 +8,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Value("${app.upload.dir}")
+    private String uploadDir;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        String path = uploadDir.endsWith("/") ? uploadDir : uploadDir + "/";
+
         registry.addResourceHandler("/uploads/productos/**")
-                .addResourceLocations("file:C:/Users/Alberto/Desktop/stockbrain-backend/stockbrain-backend/uploads/productos/");
+                .addResourceLocations("file:" + path);
     }
 }

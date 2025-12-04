@@ -33,6 +33,9 @@ public class ServicioUsuario {
     }
 
     public EntidadUsuario guardarUsuario(EntidadUsuario usuario) {
+        if(usuarioDAO.findByEmail(usuario.getEmail()).isPresent()){
+            throw new IllegalArgumentException("El email ya está en uso");
+        }
         return usuarioDAO.save(usuario);
     }
 
@@ -42,7 +45,7 @@ public class ServicioUsuario {
             usuario.setPassword(hashed);
             System.out.println("Contraseña hasheada (nueva o texto plano)");
         } else if (passwordPlana != null && passwordPlana.startsWith("$2a$")) {
-            usuario.setPassword(passwordPlana); // Ya está hasheada
+            usuario.setPassword(passwordPlana);
             System.out.println("Contraseña ya hasheada, se mantiene");
         }
     }
