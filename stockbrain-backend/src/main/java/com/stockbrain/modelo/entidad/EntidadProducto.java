@@ -1,11 +1,9 @@
 package com.stockbrain.modelo.entidad;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +29,8 @@ public class EntidadProducto {
 
     @JsonProperty("imagenUrl")
     public String getImagenUrl() {
-        return imagenRuta != null ? "http://tu-ip:8080" + imagenRuta : null;
+        if (imagenRuta == null) return null;
+        String baseUrl = "http://10.0.2.2:8080";
+        return baseUrl + imagenRuta;
     }
 }

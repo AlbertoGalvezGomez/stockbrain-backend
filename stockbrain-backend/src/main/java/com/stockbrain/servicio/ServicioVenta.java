@@ -43,11 +43,11 @@ public class ServicioVenta {
                     ", solicitado: " + venta.getCantidad());
         }
 
-        // Restar stock
+        // ACTUALIZAR EL STOCK DEL PRODUCTO
         producto.setStock(producto.getStock() - venta.getCantidad());
         productoDAO.save(producto);
 
-        // Asignar tienda y fecha
+        // COMPLETAR LOS DATOS DE LA VENTA
         venta.setTienda(producto.getTienda());
         if (venta.getFecha() == null) {
             venta.setFecha(LocalDate.now());

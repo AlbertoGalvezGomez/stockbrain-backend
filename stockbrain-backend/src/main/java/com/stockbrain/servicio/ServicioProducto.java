@@ -54,7 +54,7 @@ public class ServicioProducto {
                 producto.getTienda()
         );
 
-        productoDAO.deleteById(id);  // borra ventas + alertas antiguas + producto
+        productoDAO.deleteById(id);
     }
 
     public List<EntidadProducto> listarPorTienda(Long tiendaId) {

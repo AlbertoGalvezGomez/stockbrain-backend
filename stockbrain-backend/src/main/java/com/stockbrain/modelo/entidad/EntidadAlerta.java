@@ -40,6 +40,6 @@ public class EntidadAlerta {
     private EntidadTienda tienda;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id") // opcional: quién hizo la acción
+    @JoinColumn(name = "usuario_id")
     private EntidadUsuario usuario;
 }

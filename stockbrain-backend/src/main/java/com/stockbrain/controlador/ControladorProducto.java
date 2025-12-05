@@ -117,16 +117,15 @@ public class ControladorProducto {
     private String guardarImagen(MultipartFile imagen) {
         try {
             validarImagen(imagen);
-            String fileName = System.currentTimeMillis() + "_" + imagen.getOriginalFilename();
+            String fileName = System.currentTimeMillis() + "_" +
+                    imagen.getOriginalFilename().replace(" ", "_");
+
             Path path = Paths.get(uploadDir, fileName);
             Files.createDirectories(path.getParent());
             Files.write(path, imagen.getBytes());
 
-            // Opción 1 → Para emulador Android (recomendada mientras desarrollas)
-            return "http://10.0.2.2:8080/uploads/productos/" + fileName;
+            return "/uploads/productos/" + fileName;
 
-            // Opción 2 → Para dispositivo físico en la misma red WiFi
-            // return "http://192.168.1.133:8080/uploads/productos/" + fileName;
         } catch (IOException e) {
             throw new RuntimeException("Error al guardar imagen", e);
         }

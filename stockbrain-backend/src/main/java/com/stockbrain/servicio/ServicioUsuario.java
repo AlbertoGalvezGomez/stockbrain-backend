@@ -3,12 +3,8 @@ package com.stockbrain.servicio;
 
 import com.stockbrain.modelo.dao.IUsuarioDAO;
 import com.stockbrain.modelo.entidad.EntidadUsuario;
-import com.stockbrain.seguridad.SecurityConfig;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +32,10 @@ public class ServicioUsuario {
         if(usuarioDAO.findByEmail(usuario.getEmail()).isPresent()){
             throw new IllegalArgumentException("El email ya está en uso");
         }
+        return usuarioDAO.save(usuario);
+    }
+
+    public EntidadUsuario actualizarUsuario(EntidadUsuario usuario) {
         return usuarioDAO.save(usuario);
     }
 
@@ -102,30 +102,11 @@ public class ServicioUsuario {
                 usuarioExistente.setNombre(usuarioActualizado.getNombre().trim());
             }
 
-            if (usuarioActualizado.getEmail() != null && !usuarioActualizado.getEmail().trim().isEmpty()) {
-                String emailNuevo = usuarioActualizado.getEmail().trim().toLowerCase();
-                if (!emailNuevo.equals(usuarioExistente.getEmail()) &&
-                        usuarioDAO.findByEmail(emailNuevo).isPresent()) {
-                    throw new IllegalArgumentException("Email ya en uso");
-                }
-                usuarioExistente.setEmail(emailNuevo);
-            }
-
             if (usuarioActualizado.getPassword() != null && !usuarioActualizado.getPassword().trim().isEmpty()) {
                 hashearSiEsNecesario(usuarioExistente, usuarioActualizado.getPassword().trim());
             }
 
-            if (usuarioActualizado.getRol() != null) {
-                usuarioExistente.setRol(usuarioActualizado.getRol());
-            }
-
-            if (usuarioActualizado.getTienda() != null && usuarioActualizado.getTienda().getId() != null) {
-                usuarioExistente.setTiendaId(usuarioActualizado.getTienda().getId());
-            } else if (usuarioActualizado.getTiendaId() != null) {
-                usuarioExistente.setTiendaId(usuarioActualizado.getTiendaId());
-            }
-
-            return guardarUsuario(usuarioExistente);
+            return actualizarUsuario(usuarioExistente);
         });
     }
 }
