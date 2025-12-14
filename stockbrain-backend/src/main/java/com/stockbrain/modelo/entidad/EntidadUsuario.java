@@ -31,7 +31,12 @@ public class EntidadUsuario {
     @Enumerated(EnumType.STRING)
     private Rol rol;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    @OneToOne(
+            fetch = FetchType.LAZY,
+            optional = true,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     @JoinColumn(
             name = "tienda_id",
             nullable = true,

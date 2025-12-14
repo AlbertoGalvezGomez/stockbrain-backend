@@ -38,8 +38,4 @@ public class EntidadAlerta {
     @JoinColumn(name = "tienda_id", nullable = false)
     @JsonIgnore
     private EntidadTienda tienda;
-
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private EntidadUsuario usuario;
 }
